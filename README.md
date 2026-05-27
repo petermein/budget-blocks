@@ -2,6 +2,8 @@
 
 Visual budget planner with draggable money blocks, proportional categories, fit-based budget limits, local saving, and configurable currency.
 
+![Budget Blocks screenshot](docs/screenshot.png)
+
 Budget Blocks turns a budget into a spatial board. Add items with amounts, create category budgets, then drag items into categories. Categories reshape visually as items are placed, and an item can only be dropped when the category has enough remaining budget.
 
 ## Features
@@ -33,7 +35,7 @@ http://localhost:4173
 
 ## Deploy
 
-This is a static site. It can be published with GitHub Pages by serving the repository root.
+This is a static site. It can be published with GitHub Pages by serving the repository root. The `.nojekyll` file tells GitHub Pages to serve the files directly without Jekyll processing.
 
 Repository: https://github.com/petermein/budget-blocks
 
