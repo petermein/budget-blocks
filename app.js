@@ -22,6 +22,9 @@ let activeTilePopover = null;
 let tilePopoverTimer = null;
 
 const els = {
+  topbar: document.querySelector(".topbar"),
+  topbarActions: document.querySelector(".topbar__actions"),
+  appShell: document.querySelector(".app-shell"),
   currency: document.querySelector("#currencySelect"),
   totalBudget: document.querySelector("#totalBudget"),
   budgetSpent: document.querySelector("#budgetSpent"),
@@ -43,6 +46,8 @@ const els = {
   nameInput: document.querySelector("#nameInput"),
   amountInput: document.querySelector("#amountInput"),
 };
+
+const mobileLayout = window.matchMedia("(max-width: 560px)");
 
 function loadState() {
   const stored = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
@@ -302,6 +307,8 @@ function renderCategoryBody(body, category, previewItem = null) {
     rect.style.height = `${entry.height}%`;
     const isTight = entry.width < 24 || entry.height < 26;
     rect.classList.toggle("is-tight", isTight);
+    rect.classList.toggle("is-tiny", entry.width < 16 || entry.height < 14);
+    rect.classList.toggle("is-micro", entry.width < 9 || entry.height < 8);
     rect.classList.toggle("is-right-edge", entry.x + entry.width > 72);
     rect.classList.toggle("is-bottom-edge", entry.y + entry.height > 76);
     body.append(rect);
@@ -571,6 +578,14 @@ function setItemsDrawer(open) {
   document.body.classList.toggle("drawer-open", open);
 }
 
+function placeSettingsControls() {
+  if (mobileLayout.matches) {
+    els.appShell.after(els.topbarActions);
+  } else {
+    els.topbar.append(els.topbarActions);
+  }
+}
+
 function escapeHtml(value) {
   const div = document.createElement("div");
   div.textContent = value;
@@ -618,4 +633,6 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") setItemsDrawer(false);
 });
 
+mobileLayout.addEventListener("change", placeSettingsControls);
+placeSettingsControls();
 render();
