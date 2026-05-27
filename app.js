@@ -316,7 +316,7 @@ function renderCategoryBody(body, category, previewItem = null) {
     rect.classList.toggle("is-right-edge", entry.x + entry.width > 72);
     rect.classList.toggle("is-bottom-edge", entry.y + entry.height > 76);
     body.append(rect);
-    if (isTight && entry.kind === "item") attachTilePopover(rect, entry, body);
+    if (entry.kind === "item" && (isTight || mobileLayout.matches)) attachTilePopover(rect, entry, body);
   });
 }
 

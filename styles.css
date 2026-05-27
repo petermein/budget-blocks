@@ -905,18 +905,6 @@ button:focus-visible {
     pointer-events: auto;
   }
 
-  .category__body .item-card:not(.is-micro) .item__actions {
-    display: flex;
-    flex-wrap: wrap;
-    top: auto;
-    right: 0.45rem;
-    bottom: 0.45rem;
-    max-width: calc(100% - 0.9rem);
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-  }
-
   .category__body .treemap-tile.is-tight:not(.tile-popover) .item__actions,
   .category__body .treemap-tile.is-tiny:not(.tile-popover) .item__actions {
     display: none;
