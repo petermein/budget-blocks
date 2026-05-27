@@ -30,6 +30,10 @@ body {
   background-size: 28px 28px, 28px 28px, auto, auto;
 }
 
+body.drawer-open {
+  overflow: hidden;
+}
+
 button,
 input,
 select {
@@ -159,6 +163,12 @@ button:focus-visible {
   background: #fffaf0;
 }
 
+.drawer-toggle,
+.drawer-close,
+.drawer-backdrop {
+  display: none;
+}
+
 .app-shell {
   display: grid;
   grid-template-columns: minmax(18rem, 24rem) 1fr;
@@ -181,6 +191,7 @@ button:focus-visible {
 
 .panel-heading {
   display: grid;
+  grid-template-columns: 1fr;
   gap: 1rem;
   margin-bottom: 1rem;
   padding: 1rem;
@@ -662,24 +673,179 @@ button:focus-visible {
 }
 
 @media (max-width: 560px) {
-  .topbar {
-    align-items: stretch;
-    flex-direction: column;
+  body {
+    padding-bottom: 5.5rem;
   }
 
-  .topbar__actions,
+  .topbar {
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+    backdrop-filter: none;
+  }
+
+  .topbar h1 {
+    font-size: clamp(1.55rem, 8vw, 2.35rem);
+    white-space: nowrap;
+  }
+
+  .topbar .eyebrow {
+    font-size: 0.62rem;
+  }
+
+  .drawer-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding-inline: 0.85rem;
+  }
+
+  .topbar__actions {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 35;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 0.75rem;
+    padding: 0.7rem 0.85rem calc(0.7rem + env(safe-area-inset-bottom));
+    border-top: 3px solid var(--line);
+    background: rgba(245, 239, 226, 0.96);
+    box-shadow: 0 -8px 0 rgba(28, 26, 23, 0.12);
+    backdrop-filter: blur(12px);
+  }
+
+  .topbar__actions .button {
+    min-height: 2.65rem;
+    white-space: nowrap;
+  }
+
+  .app-shell {
+    display: block;
+    padding: 0.85rem;
+  }
+
   .budget-summary {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+    padding: 0.85rem;
+  }
+
+  .budget-summary > div {
+    min-width: 0;
+  }
+
+  .budget-summary strong {
+    font-size: clamp(1.35rem, 8vw, 2.25rem);
+  }
+
+  .budget-summary .button {
+    grid-column: 1 / -1;
   }
 
   .category__head {
     grid-template-columns: 1fr;
+    padding: 0.85rem;
+  }
+
+  .category__title h3 {
+    font-size: clamp(1.65rem, 10vw, 2.4rem);
+  }
+
+  .category__body.items-grid {
+    height: clamp(19rem, 68vh, var(--category-height));
+    padding: 0.6rem;
+    background-position: 0.6rem 0.6rem;
+  }
+
+  .item-dock {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 50;
+    width: min(88vw, 23rem);
+    padding: 0.85rem;
+    background:
+      linear-gradient(rgba(28, 26, 23, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(28, 26, 23, 0.045) 1px, transparent 1px),
+      var(--paper);
+    background-size: 28px 28px;
+    border-right: 3px solid var(--line);
+    box-shadow: 12px 0 0 rgba(28, 26, 23, 0.2);
+    overflow: auto;
+    transform: translateX(calc(-100% - 1rem));
+    transition: transform 180ms ease;
+  }
+
+  .item-dock.is-open {
+    transform: translateX(0);
+  }
+
+  .drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    display: block;
+    background: rgba(28, 26, 23, 0.36);
+  }
+
+  .drawer-backdrop[hidden] {
+    display: none;
+  }
+
+  .drawer-close {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: end;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .panel-heading {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+
+  .panel-heading .button {
+    grid-column: 1 / -1;
+  }
+
+  .drop-shelf {
+    min-height: calc(100vh - 12rem);
+  }
+
+  #unassignedItems .item-card {
+    min-height: 8.25rem;
+    padding-top: 0.85rem;
+  }
+
+  #unassignedItems .item-card::before {
+    display: none;
+  }
+
+  #unassignedItems .item__actions {
+    top: auto;
+    right: auto;
+    bottom: 0.6rem;
+    left: 0.6rem;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
   }
 
   .item-card {
     width: min(calc(var(--tile-cols) * var(--cell-size)), 88vw);
     height: calc(var(--tile-rows) * var(--cell-size));
+  }
+
+  .editor {
+    width: min(94vw, 30rem);
   }
 }
 

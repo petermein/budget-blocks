@@ -29,6 +29,10 @@ const els = {
   addItem: document.querySelector("#addItem"),
   addCategory: document.querySelector("#addCategory"),
   resetBoard: document.querySelector("#resetBoard"),
+  openItems: document.querySelector("#openItems"),
+  closeItems: document.querySelector("#closeItems"),
+  drawerBackdrop: document.querySelector("#drawerBackdrop"),
+  itemDock: document.querySelector("#itemDock"),
   unassignedDropZone: document.querySelector("#unassignedDropZone"),
   unassignedItems: document.querySelector("#unassignedItems"),
   categories: document.querySelector("#categories"),
@@ -560,6 +564,13 @@ function deleteCategory(id) {
   render();
 }
 
+function setItemsDrawer(open) {
+  els.itemDock.classList.toggle("is-open", open);
+  els.drawerBackdrop.hidden = !open;
+  els.openItems.setAttribute("aria-expanded", String(open));
+  document.body.classList.toggle("drawer-open", open);
+}
+
 function escapeHtml(value) {
   const div = document.createElement("div");
   div.textContent = value;
@@ -570,6 +581,9 @@ attachDropZone(els.unassignedDropZone, null);
 
 els.addItem.addEventListener("click", () => openEditor("item", "create"));
 els.addCategory.addEventListener("click", () => openEditor("category", "create"));
+els.openItems.addEventListener("click", () => setItemsDrawer(true));
+els.closeItems.addEventListener("click", () => setItemsDrawer(false));
+els.drawerBackdrop.addEventListener("click", () => setItemsDrawer(false));
 els.currency.addEventListener("change", (event) => {
   state.currency = normalizeCurrency(event.target.value);
   render();
@@ -598,6 +612,10 @@ document.addEventListener("click", (event) => {
   if (action === "delete-item") deleteItem(id);
   if (action === "edit-category") openEditor("category", "edit", id);
   if (action === "delete-category") deleteCategory(id);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") setItemsDrawer(false);
 });
 
 render();

@@ -30,6 +30,10 @@
         <h1>Budget Blocks</h1>
       </div>
 
+      <button class="button button--ink drawer-toggle" id="openItems" type="button" aria-controls="itemDock" aria-expanded="false">
+        Items
+      </button>
+
       <div class="topbar__actions">
         <label class="currency-control">
           <span>Currency</span>
@@ -45,13 +49,16 @@
       </div>
     </header>
 
+    <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+
     <main class="app-shell">
-      <aside class="item-dock" aria-label="Unassigned items">
+      <aside class="item-dock" id="itemDock" aria-label="Unassigned items">
         <div class="panel-heading">
           <div>
             <p class="eyebrow">Loose items</p>
             <h2>Drag these into a category</h2>
           </div>
+          <button class="icon-button drawer-close" id="closeItems" type="button" aria-label="Close items drawer">x</button>
           <button class="button button--ink" id="addItem" type="button">Add item</button>
         </div>
         <div class="drop-shelf" id="unassignedDropZone">
