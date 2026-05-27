@@ -99,7 +99,7 @@ h2 {
   justify-content: flex-end;
 }
 
-.currency-control {
+.settings-control {
   display: grid;
   gap: 0.25rem;
   color: var(--muted);
@@ -276,7 +276,7 @@ button:focus-visible {
 }
 
 .category.is-blocked::after {
-  content: "No room";
+  content: attr(data-blocked-label);
   position: absolute;
   inset: 50% auto auto 50%;
   z-index: 2;
@@ -812,7 +812,7 @@ button:focus-visible {
     white-space: nowrap;
   }
 
-  .currency-control,
+  .settings-control,
   .share-status {
     grid-column: 1 / -1;
   }

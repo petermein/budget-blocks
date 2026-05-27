@@ -13,6 +13,204 @@ const CURRENCIES = {
   JPY: { code: "JPY", name: "Japanese Yen", locale: "ja-JP" },
 };
 
+const LANGUAGES = {
+  en: { code: "en", name: "English" },
+  nl: { code: "nl", name: "Nederlands" },
+  de: { code: "de", name: "Deutsch" },
+};
+
+const TRANSLATIONS = {
+  en: {
+    pageTitle: "Budget Blocks",
+    metaDescription:
+      "Visual budget planner with draggable money blocks, proportional categories, fit-based budget limits, local saving, and configurable currency.",
+    appEyebrow: "Visual budget divider",
+    appTitle: "Budget Blocks",
+    languageLabel: "Language",
+    languageAria: "Language",
+    currencyLabel: "Currency",
+    currencyAria: "Currency",
+    shareButton: "Share",
+    resetButton: "Start over",
+    itemsButton: "Items",
+    closeItemsDrawer: "Close items drawer",
+    closeDialog: "Close",
+    looseItems: "Loose items",
+    placeItems: "Place items into categories",
+    addItem: "Add item",
+    budgetCategories: "Budget categories",
+    totalBudget: "Total budget",
+    budgetSpent: "Budget spent",
+    remaining: "Remaining",
+    remainingName: "Remaining",
+    addCategory: "Add category",
+    create: "Create",
+    update: "Update",
+    item: "Item",
+    category: "Category",
+    nameLabel: "Name",
+    amountLabel: "Amount",
+    cancelButton: "Cancel",
+    saveButton: "Save",
+    placeItem: "Place item",
+    chooseCategory: "Choose category",
+    sharedBoard: "Shared board",
+    openBudget: "Open this budget?",
+    importCopy:
+      "This link contains a different Budget Blocks board. Import it to replace the board saved in this browser, or keep your current board.",
+    keepBoard: "Keep my board",
+    importBoard: "Import shared board",
+    linkCopied: "Link copied",
+    noLooseItems: "No loose items. Move a categorized item here to unassign it.",
+    addFirstCategory: "Add a category to create your first budget area.",
+    placedRemaining: "{spent} placed / {remaining} remaining",
+    edit: "Edit",
+    deleteShort: "Del",
+    move: "Move",
+    place: "Place",
+    out: "Out",
+    removeFromCategoryAria: "Remove {name} from category",
+    editAria: "Edit {name}",
+    deleteAria: "Delete {name}",
+    moveAria: "Move {name}",
+    placeAria: "Place {name}",
+    dropPreview: "Drop preview",
+    removeFromCategory: "Remove from category",
+    alreadyLoose: "Already loose",
+    currentCategory: "Current category",
+    available: "{amount} available",
+    noRoomSuffix: " - no room",
+    noRoom: "No room",
+    resetConfirm: "Start over with the sample board?",
+  },
+  nl: {
+    pageTitle: "Budgetblokken",
+    metaDescription:
+      "Visuele budgetplanner met versleepbare geldblokken, proportionele categorieën, budgetlimieten op basis van beschikbare ruimte, lokale opslag en instelbare valuta.",
+    appEyebrow: "Visuele budgetverdeler",
+    appTitle: "Budgetblokken",
+    languageLabel: "Taal",
+    languageAria: "Taal",
+    currencyLabel: "Valuta",
+    currencyAria: "Valuta",
+    shareButton: "Delen",
+    resetButton: "Opnieuw",
+    itemsButton: "Items",
+    closeItemsDrawer: "Itemlade sluiten",
+    closeDialog: "Sluiten",
+    looseItems: "Losse items",
+    placeItems: "Plaats items in categorieën",
+    addItem: "Item toevoegen",
+    budgetCategories: "Budgetcategorieën",
+    totalBudget: "Totaalbudget",
+    budgetSpent: "Besteed",
+    remaining: "Resterend",
+    remainingName: "Resterend",
+    addCategory: "Categorie toevoegen",
+    create: "Aanmaken",
+    update: "Bijwerken",
+    item: "Item",
+    category: "Categorie",
+    nameLabel: "Naam",
+    amountLabel: "Bedrag",
+    cancelButton: "Annuleren",
+    saveButton: "Opslaan",
+    placeItem: "Item plaatsen",
+    chooseCategory: "Kies categorie",
+    sharedBoard: "Gedeeld bord",
+    openBudget: "Dit budget openen?",
+    importCopy:
+      "Deze link bevat een ander Budgetblokken-bord. Importeer het om het bord in deze browser te vervangen, of behoud je huidige bord.",
+    keepBoard: "Mijn bord houden",
+    importBoard: "Gedeeld bord importeren",
+    linkCopied: "Link gekopieerd",
+    noLooseItems: "Geen losse items. Verplaats een ingedeeld item hierheen om het los te maken.",
+    addFirstCategory: "Voeg een categorie toe om je eerste budgetgebied te maken.",
+    placedRemaining: "{spent} geplaatst / {remaining} resterend",
+    edit: "Bewerk",
+    deleteShort: "Wis",
+    move: "Verplaats",
+    place: "Plaats",
+    out: "Uit",
+    removeFromCategoryAria: "{name} uit categorie halen",
+    editAria: "{name} bewerken",
+    deleteAria: "{name} verwijderen",
+    moveAria: "{name} verplaatsen",
+    placeAria: "{name} plaatsen",
+    dropPreview: "Voorbeeld",
+    removeFromCategory: "Uit categorie halen",
+    alreadyLoose: "Al los",
+    currentCategory: "Huidige categorie",
+    available: "{amount} beschikbaar",
+    noRoomSuffix: " - geen ruimte",
+    noRoom: "Geen ruimte",
+    resetConfirm: "Opnieuw beginnen met het voorbeeldbord?",
+  },
+  de: {
+    pageTitle: "Budget Blocks",
+    metaDescription:
+      "Visueller Budgetplaner mit verschiebbaren Geldblöcken, proportionalen Kategorien, platzbasierten Budgetgrenzen, lokaler Speicherung und konfigurierbarer Währung.",
+    appEyebrow: "Visueller Budgetteiler",
+    appTitle: "Budget Blocks",
+    languageLabel: "Sprache",
+    languageAria: "Sprache",
+    currencyLabel: "Währung",
+    currencyAria: "Währung",
+    shareButton: "Teilen",
+    resetButton: "Neu starten",
+    itemsButton: "Posten",
+    closeItemsDrawer: "Postenleiste schließen",
+    closeDialog: "Schließen",
+    looseItems: "Lose Posten",
+    placeItems: "Posten Kategorien zuordnen",
+    addItem: "Posten hinzufügen",
+    budgetCategories: "Budgetkategorien",
+    totalBudget: "Gesamtbudget",
+    budgetSpent: "Ausgegeben",
+    remaining: "Verbleibend",
+    remainingName: "Verbleibend",
+    addCategory: "Kategorie hinzufügen",
+    create: "Erstellen",
+    update: "Aktualisieren",
+    item: "Posten",
+    category: "Kategorie",
+    nameLabel: "Name",
+    amountLabel: "Betrag",
+    cancelButton: "Abbrechen",
+    saveButton: "Speichern",
+    placeItem: "Posten platzieren",
+    chooseCategory: "Kategorie wählen",
+    sharedBoard: "Geteiltes Board",
+    openBudget: "Dieses Budget öffnen?",
+    importCopy:
+      "Dieser Link enthält ein anderes Budget-Blocks-Board. Importiere es, um das in diesem Browser gespeicherte Board zu ersetzen, oder behalte dein aktuelles Board.",
+    keepBoard: "Mein Board behalten",
+    importBoard: "Geteiltes Board importieren",
+    linkCopied: "Link kopiert",
+    noLooseItems: "Keine losen Posten. Verschiebe einen kategorisierten Posten hierher, um ihn zu lösen.",
+    addFirstCategory: "Füge eine Kategorie hinzu, um deinen ersten Budgetbereich zu erstellen.",
+    placedRemaining: "{spent} platziert / {remaining} verbleibend",
+    edit: "Bearb.",
+    deleteShort: "Lösch.",
+    move: "Versch.",
+    place: "Platz.",
+    out: "Raus",
+    removeFromCategoryAria: "{name} aus Kategorie entfernen",
+    editAria: "{name} bearbeiten",
+    deleteAria: "{name} löschen",
+    moveAria: "{name} verschieben",
+    placeAria: "{name} platzieren",
+    dropPreview: "Vorschau",
+    removeFromCategory: "Aus Kategorie entfernen",
+    alreadyLoose: "Bereits lose",
+    currentCategory: "Aktuelle Kategorie",
+    available: "{amount} verfügbar",
+    noRoomSuffix: " - kein Platz",
+    noRoom: "Kein Platz",
+    resetConfirm: "Mit dem Beispielboard neu starten?",
+  },
+};
+
 const palette = ["#f0c85a", "#8fb6a3", "#e58a64", "#91a8d1", "#c7a6d8", "#d8b06a"];
 
 const defaults = createDefaultState();
@@ -32,6 +230,7 @@ const els = {
   topbar: document.querySelector(".topbar"),
   topbarActions: document.querySelector(".topbar__actions"),
   appShell: document.querySelector(".app-shell"),
+  language: document.querySelector("#languageSelect"),
   currency: document.querySelector("#currencySelect"),
   totalBudget: document.querySelector("#totalBudget"),
   budgetSpent: document.querySelector("#budgetSpent"),
@@ -59,6 +258,9 @@ const els = {
   editorTitle: document.querySelector("#editorTitle"),
   nameInput: document.querySelector("#nameInput"),
   amountInput: document.querySelector("#amountInput"),
+  metaDescription: document.querySelector('meta[name="description"]'),
+  ogDescription: document.querySelector('meta[property="og:description"]'),
+  i18nNodes: document.querySelectorAll("[data-i18n]"),
 };
 
 const mobileLayout = window.matchMedia("(max-width: 560px)");
@@ -93,6 +295,7 @@ function loadStoredState() {
 
 function createDefaultState() {
   return {
+    language: "en",
     currency: "EUR",
     items: [
       { id: makeId(), name: "Plants", amount: 50, categoryId: null, color: "#8fbf72" },
@@ -142,6 +345,7 @@ function normalizeState(value) {
     : clone(defaults.items);
 
   return {
+    language: normalizeLanguage(value?.language),
     currency: normalizeCurrency(value?.currency),
     items,
     categories,
@@ -236,7 +440,7 @@ async function copyShareLink() {
     copyTextFallback(url);
   }
 
-  showShareStatus("Link copied");
+  showShareStatus(t("linkCopied"));
 }
 
 function copyTextFallback(value) {
@@ -295,6 +499,38 @@ function money(value) {
 
 function normalizeCurrency(currency) {
   return CURRENCIES[currency] ? currency : "EUR";
+}
+
+function normalizeLanguage(language) {
+  return LANGUAGES[language] ? language : "en";
+}
+
+function t(key, replacements = {}) {
+  const translations = TRANSLATIONS[state.language] || TRANSLATIONS.en;
+  let value = translations[key] || TRANSLATIONS.en[key] || key;
+  Object.entries(replacements).forEach(([name, replacement]) => {
+    value = value.replaceAll(`{${name}}`, replacement);
+  });
+  return value;
+}
+
+function applyStaticText() {
+  document.documentElement.lang = state.language;
+  document.title = t("pageTitle");
+  els.metaDescription?.setAttribute("content", t("metaDescription"));
+  els.ogDescription?.setAttribute("content", t("metaDescription"));
+  els.i18nNodes.forEach((node) => {
+    node.textContent = t(node.dataset.i18n);
+  });
+  els.language.setAttribute("aria-label", t("languageAria"));
+  els.currency.setAttribute("aria-label", t("currencyAria"));
+  els.openItems.textContent = t("itemsButton");
+  els.itemDock.setAttribute("aria-label", t("looseItems"));
+  els.closeItems.setAttribute("aria-label", t("closeItemsDrawer"));
+  document.querySelectorAll('.editor .icon-button[value="cancel"], .assign-dialog .icon-button[value="cancel"]').forEach((button) => {
+    button.setAttribute("aria-label", t("closeDialog"));
+  });
+  document.querySelector(".budget-stage")?.setAttribute("aria-label", t("budgetCategories"));
 }
 
 function currencyDigits(config) {
@@ -395,6 +631,9 @@ function treemap(entries, x = 0, y = 0, width = 100, height = 100) {
 }
 
 function render() {
+  state.language = normalizeLanguage(state.language);
+  els.language.value = state.language;
+  applyStaticText();
   els.currency.value = state.currency;
   const budget = totals();
   els.totalBudget.textContent = money(budget.total);
@@ -412,7 +651,7 @@ function renderItems() {
   els.unassignedItems.innerHTML = "";
 
   if (!unassigned.length) {
-    els.unassignedItems.append(emptyState("No loose items. Move a categorized item here to unassign it."));
+    els.unassignedItems.append(emptyState(t("noLooseItems")));
     return;
   }
 
@@ -423,7 +662,7 @@ function renderCategories() {
   els.categories.innerHTML = "";
 
   if (!state.categories.length) {
-    els.categories.append(emptyState("Add a category to create your first budget area."));
+    els.categories.append(emptyState(t("addFirstCategory")));
     return;
   }
 
@@ -434,6 +673,7 @@ function renderCategories() {
     const node = document.createElement("article");
     node.className = `category${remaining <= 0 ? " is-full" : ""}`;
     node.dataset.categoryId = category.id;
+    node.dataset.blockedLabel = t("noRoom");
     node.style.setProperty("--fill-width", `${fill}%`);
     node.style.setProperty("--category-color", category.color);
     node.style.setProperty("--category-height", categoryHeight(category.amount));
@@ -444,11 +684,11 @@ function renderCategories() {
             <h3>${escapeHtml(category.name)}</h3>
             <strong>${money(Number(category.amount || 0))}</strong>
           </div>
-          <p class="category__meta">${money(spent)} placed / ${money(Math.max(0, remaining))} remaining</p>
+          <p class="category__meta">${t("placedRemaining", { spent: money(spent), remaining: money(Math.max(0, remaining)) })}</p>
         </div>
         <div class="category__actions">
-          <button class="mini-button" type="button" data-action="edit-category" data-id="${category.id}" aria-label="Edit ${escapeHtml(category.name)}">Edit</button>
-          <button class="mini-button mini-button--danger" type="button" data-action="delete-category" data-id="${category.id}" aria-label="Delete ${escapeHtml(category.name)}">Del</button>
+          <button class="mini-button" type="button" data-action="edit-category" data-id="${category.id}" aria-label="${escapeHtml(t("editAria", { name: category.name }))}">${t("edit")}</button>
+          <button class="mini-button mini-button--danger" type="button" data-action="delete-category" data-id="${category.id}" aria-label="${escapeHtml(t("deleteAria", { name: category.name }))}">${t("deleteShort")}</button>
         </div>
       </div>
       <div class="category__body items-grid"></div>
@@ -474,7 +714,7 @@ function renderCategoryBody(body, category, previewItem = null) {
   const remaining = Math.max(0, Number(category.amount || 0) - spent);
   const layout = treemap([
     ...placedItems,
-    ...(remaining > 0 ? [{ id: "remaining", name: "Remaining", amount: remaining, kind: "remaining" }] : []),
+    ...(remaining > 0 ? [{ id: "remaining", name: t("remainingName"), amount: remaining, kind: "remaining" }] : []),
   ]);
 
   body.innerHTML = "";
@@ -526,10 +766,10 @@ function showTilePopover(tile, item, body) {
       <p class="item__amount">${money(Number(item.amount || 0))}</p>
     </div>
     <div class="item__actions">
-      <button class="mini-button" type="button" data-action="assign-item" data-id="${item.id}" aria-label="Move ${escapeHtml(item.name)}">Move</button>
-      <button class="mini-button" type="button" data-action="unassign-item" data-id="${item.id}" aria-label="Remove ${escapeHtml(item.name)} from category">Out</button>
-      <button class="mini-button" type="button" data-action="edit-item" data-id="${item.id}" aria-label="Edit ${escapeHtml(item.name)}">Edit</button>
-      <button class="mini-button mini-button--danger" type="button" data-action="delete-item" data-id="${item.id}" aria-label="Delete ${escapeHtml(item.name)}">Del</button>
+      <button class="mini-button" type="button" data-action="assign-item" data-id="${item.id}" aria-label="${escapeHtml(t("moveAria", { name: item.name }))}">${t("move")}</button>
+      <button class="mini-button" type="button" data-action="unassign-item" data-id="${item.id}" aria-label="${escapeHtml(t("removeFromCategoryAria", { name: item.name }))}">${t("out")}</button>
+      <button class="mini-button" type="button" data-action="edit-item" data-id="${item.id}" aria-label="${escapeHtml(t("editAria", { name: item.name }))}">${t("edit")}</button>
+      <button class="mini-button mini-button--danger" type="button" data-action="delete-item" data-id="${item.id}" aria-label="${escapeHtml(t("deleteAria", { name: item.name }))}">${t("deleteShort")}</button>
     </div>
   `;
 
@@ -574,7 +814,9 @@ function itemElement(item, options = {}) {
   node.style.setProperty("--tile-rows", shape.rows);
   node.style.setProperty("--tile-cells", shape.cells);
   node.style.setProperty("--item-color", item.color);
-  const moveLabel = item.categoryId ? "Move" : "Place";
+  const moveKey = item.categoryId ? "move" : "place";
+  const moveLabel = t(moveKey);
+  const moveAria = t(item.categoryId ? "moveAria" : "placeAria", { name: item.name });
   node.innerHTML = `
     <div>
       <p class="item__name">${escapeHtml(item.name)}</p>
@@ -582,12 +824,12 @@ function itemElement(item, options = {}) {
     </div>
     ${
       options.preview
-        ? '<p class="preview-label">Drop preview</p>'
+        ? `<p class="preview-label">${t("dropPreview")}</p>`
         : `<div class="item__actions">
-            <button class="mini-button" type="button" data-action="assign-item" data-id="${item.id}" aria-label="${moveLabel} ${escapeHtml(item.name)}">${moveLabel}</button>
-            ${item.categoryId ? `<button class="mini-button" type="button" data-action="unassign-item" data-id="${item.id}" aria-label="Remove ${escapeHtml(item.name)} from category">Out</button>` : ""}
-            <button class="mini-button" type="button" data-action="edit-item" data-id="${item.id}" aria-label="Edit ${escapeHtml(item.name)}">Edit</button>
-            <button class="mini-button mini-button--danger" type="button" data-action="delete-item" data-id="${item.id}" aria-label="Delete ${escapeHtml(item.name)}">Del</button>
+            <button class="mini-button" type="button" data-action="assign-item" data-id="${item.id}" aria-label="${escapeHtml(moveAria)}">${moveLabel}</button>
+            ${item.categoryId ? `<button class="mini-button" type="button" data-action="unassign-item" data-id="${item.id}" aria-label="${escapeHtml(t("removeFromCategoryAria", { name: item.name }))}">${t("out")}</button>` : ""}
+            <button class="mini-button" type="button" data-action="edit-item" data-id="${item.id}" aria-label="${escapeHtml(t("editAria", { name: item.name }))}">${t("edit")}</button>
+            <button class="mini-button mini-button--danger" type="button" data-action="delete-item" data-id="${item.id}" aria-label="${escapeHtml(t("deleteAria", { name: item.name }))}">${t("deleteShort")}</button>
           </div>`
     }
   `;
@@ -615,7 +857,7 @@ function remainingElement(amount) {
   const node = document.createElement("div");
   node.className = "remaining-tile";
   node.innerHTML = `
-    <p class="item__name">Remaining</p>
+    <p class="item__name">${t("remainingName")}</p>
     <p class="item__amount">${money(Number(amount || 0))}</p>
   `;
   return node;
@@ -706,7 +948,7 @@ function openAssignDialog(itemId) {
   if (!item) return;
 
   assigningItemId = itemId;
-  els.assignTitle.textContent = item.categoryId ? `Move ${item.name}` : `Place ${item.name}`;
+  els.assignTitle.textContent = t(item.categoryId ? "moveAria" : "placeAria", { name: item.name });
   renderAssignList(item);
   setItemsDrawer(false);
   els.assignDialog.showModal();
@@ -722,8 +964,8 @@ function renderAssignList(item) {
   unassignedButton.dataset.action = "assign-choice";
   unassignedButton.dataset.categoryId = "";
   unassignedButton.innerHTML = `
-    <strong>Loose items</strong>
-    <span>${item.categoryId ? "Remove from category" : "Already loose"}</span>
+    <strong>${t("looseItems")}</strong>
+    <span>${item.categoryId ? t("removeFromCategory") : t("alreadyLoose")}</span>
   `;
   els.assignList.append(unassignedButton);
 
@@ -740,7 +982,11 @@ function renderAssignList(item) {
     button.dataset.categoryId = category.id;
     button.innerHTML = `
       <strong>${escapeHtml(category.name)}</strong>
-      <span>${isCurrent ? "Current category" : `${money(Math.max(0, remaining))} available${fits ? "" : " - no room"}`}</span>
+      <span>${
+        isCurrent
+          ? t("currentCategory")
+          : t("available", { amount: money(Math.max(0, remaining)) }) + (fits ? "" : t("noRoomSuffix"))
+      }</span>
     `;
     els.assignList.append(button);
   });
@@ -763,8 +1009,8 @@ function openEditor(type, mode, id = null) {
     : null;
 
   editorIntent = { type, mode, id };
-  els.editorMode.textContent = mode === "create" ? "Create" : "Update";
-  els.editorTitle.textContent = isItem ? "Item" : "Category";
+  els.editorMode.textContent = t(mode === "create" ? "create" : "update");
+  els.editorTitle.textContent = t(isItem ? "item" : "category");
   els.nameInput.value = record?.name || "";
   els.amountInput.value = record?.amount || "";
   els.dialog.showModal();
@@ -845,15 +1091,21 @@ els.shareBoard.addEventListener("click", copyShareLink);
 els.openItems.addEventListener("click", () => setItemsDrawer(true));
 els.closeItems.addEventListener("click", () => setItemsDrawer(false));
 els.drawerBackdrop.addEventListener("click", () => setItemsDrawer(false));
+els.language.addEventListener("change", (event) => {
+  state.language = normalizeLanguage(event.target.value);
+  render();
+});
 els.currency.addEventListener("change", (event) => {
   state.currency = normalizeCurrency(event.target.value);
   render();
 });
 
 els.resetBoard.addEventListener("click", () => {
-  const shouldReset = confirm("Start over with the sample board?");
+  const language = state.language;
+  const shouldReset = confirm(t("resetConfirm"));
   if (!shouldReset) return;
   state = clone(createDefaultState());
+  state.language = language;
   render();
 });
 

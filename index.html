@@ -26,8 +26,8 @@
   <body>
     <header class="topbar">
       <div>
-        <p class="eyebrow">Visual budget divider</p>
-        <h1>Budget Blocks</h1>
+        <p class="eyebrow" data-i18n="appEyebrow">Visual budget divider</p>
+        <h1 data-i18n="appTitle">Budget Blocks</h1>
       </div>
 
       <button class="button button--ink drawer-toggle" id="openItems" type="button" aria-controls="itemDock" aria-expanded="false">
@@ -35,8 +35,16 @@
       </button>
 
       <div class="topbar__actions">
-        <label class="currency-control">
-          <span>Currency</span>
+        <label class="settings-control">
+          <span data-i18n="languageLabel">Language</span>
+          <select id="languageSelect" aria-label="Language">
+            <option value="en">English</option>
+            <option value="nl">Nederlands</option>
+            <option value="de">Deutsch</option>
+          </select>
+        </label>
+        <label class="settings-control">
+          <span data-i18n="currencyLabel">Currency</span>
           <select id="currencySelect" aria-label="Currency">
             <option value="EUR">EUR - Euro</option>
             <option value="USD">USD - US Dollar</option>
@@ -45,8 +53,8 @@
             <option value="JPY">JPY - Japanese Yen</option>
           </select>
         </label>
-        <button class="button button--ink" id="shareBoard" type="button">Share</button>
-        <button class="button button--ghost" id="resetBoard" type="button">Start over</button>
+        <button class="button button--ink" id="shareBoard" type="button" data-i18n="shareButton">Share</button>
+        <button class="button button--ghost" id="resetBoard" type="button" data-i18n="resetButton">Start over</button>
         <p class="share-status" id="shareStatus" aria-live="polite"></p>
       </div>
     </header>
@@ -57,11 +65,11 @@
       <aside class="item-dock" id="itemDock" aria-label="Unassigned items">
         <div class="panel-heading">
           <div>
-            <p class="eyebrow">Loose items</p>
-            <h2>Place items into categories</h2>
+            <p class="eyebrow" data-i18n="looseItems">Loose items</p>
+            <h2 data-i18n="placeItems">Place items into categories</h2>
           </div>
           <button class="icon-button drawer-close" id="closeItems" type="button" aria-label="Close items drawer">x</button>
-          <button class="button button--ink" id="addItem" type="button">Add item</button>
+          <button class="button button--ink" id="addItem" type="button" data-i18n="addItem">Add item</button>
         </div>
         <div class="drop-shelf" id="unassignedDropZone">
           <div class="items-grid" id="unassignedItems"></div>
@@ -71,18 +79,18 @@
       <section class="budget-stage" aria-label="Budget categories">
         <div class="budget-summary">
           <div>
-            <p class="eyebrow">Total budget</p>
+            <p class="eyebrow" data-i18n="totalBudget">Total budget</p>
             <strong id="totalBudget">€0</strong>
           </div>
           <div>
-            <p class="eyebrow">Budget spent</p>
+            <p class="eyebrow" data-i18n="budgetSpent">Budget spent</p>
             <strong id="budgetSpent">€0</strong>
           </div>
           <div>
-            <p class="eyebrow">Remaining</p>
+            <p class="eyebrow" data-i18n="remaining">Remaining</p>
             <strong id="budgetRemaining">€0</strong>
           </div>
-          <button class="button button--ink" id="addCategory" type="button">Add category</button>
+          <button class="button button--ink" id="addCategory" type="button" data-i18n="addCategory">Add category</button>
         </div>
 
         <div class="category-stack" id="categories"></div>
@@ -96,22 +104,22 @@
             <p class="eyebrow" id="editorMode">Create</p>
             <h2 id="editorTitle">Item</h2>
           </div>
-          <button class="icon-button" value="cancel" aria-label="Close" type="submit">x</button>
+          <button class="icon-button" value="cancel" aria-label="Close" type="submit" formnovalidate>x</button>
         </div>
 
         <label>
-          <span>Name</span>
+          <span data-i18n="nameLabel">Name</span>
           <input id="nameInput" name="name" autocomplete="off" required />
         </label>
 
         <label>
-          <span>Amount</span>
+          <span data-i18n="amountLabel">Amount</span>
           <input id="amountInput" name="amount" inputmode="decimal" min="0" step="0.01" type="number" required />
         </label>
 
         <menu class="editor__actions">
-          <button class="button button--ghost" value="cancel" type="submit">Cancel</button>
-          <button class="button button--ink" id="saveEditor" value="default" type="submit">Save</button>
+          <button class="button button--ghost" value="cancel" type="submit" formnovalidate data-i18n="cancelButton">Cancel</button>
+          <button class="button button--ink" id="saveEditor" value="default" type="submit" data-i18n="saveButton">Save</button>
         </menu>
       </form>
     </dialog>
@@ -120,10 +128,10 @@
       <form method="dialog">
         <div class="editor__head">
           <div>
-            <p class="eyebrow">Place item</p>
+            <p class="eyebrow" data-i18n="placeItem">Place item</p>
             <h2 id="assignTitle">Choose category</h2>
           </div>
-          <button class="icon-button" value="cancel" aria-label="Close" type="submit">x</button>
+          <button class="icon-button" value="cancel" aria-label="Close" type="submit" formnovalidate>x</button>
         </div>
 
         <div class="assign-list" id="assignList"></div>
@@ -134,18 +142,18 @@
       <form method="dialog">
         <div class="editor__head">
           <div>
-            <p class="eyebrow">Shared board</p>
-            <h2>Open this budget?</h2>
+            <p class="eyebrow" data-i18n="sharedBoard">Shared board</p>
+            <h2 data-i18n="openBudget">Open this budget?</h2>
           </div>
         </div>
 
-        <p class="dialog-copy">
+        <p class="dialog-copy" data-i18n="importCopy">
           This link contains a different Budget Blocks board. Import it to replace the board saved in this browser, or keep your current board.
         </p>
 
         <menu class="editor__actions">
-          <button class="button button--ghost" value="keep" type="submit">Keep my board</button>
-          <button class="button button--ink" id="importSharedBoard" value="import" type="submit">Import shared board</button>
+          <button class="button button--ghost" value="keep" type="submit" data-i18n="keepBoard">Keep my board</button>
+          <button class="button button--ink" id="importSharedBoard" value="import" type="submit" data-i18n="importBoard">Import shared board</button>
         </menu>
       </form>
     </dialog>
