@@ -3,6 +3,14 @@ const LEGACY_STORAGE_KEY = "budget-atlas-board-v1";
 const TARGET_BOARD_CELLS = 80;
 const CATEGORY_COLUMNS = 10;
 
+const CURRENCIES = {
+  EUR: { code: "EUR", name: "Euro", locale: "nl-NL" },
+  USD: { code: "USD", name: "US Dollar", locale: "en-US" },
+  GBP: { code: "GBP", name: "British Pound", locale: "en-GB" },
+  CHF: { code: "CHF", name: "Swiss Franc", locale: "de-CH" },
+  JPY: { code: "JPY", name: "Japanese Yen", locale: "ja-JP" },
+};
+
 const palette = ["#f0c85a", "#8fb6a3", "#e58a64", "#91a8d1", "#c7a6d8", "#d8b06a"];
 
 const defaults = createDefaultState();
@@ -39,7 +47,7 @@ function loadState() {
   try {
     const parsed = JSON.parse(stored);
     const nextState = {
-      currency: parsed.currency || "EUR",
+      currency: normalizeCurrency(parsed.currency),
       items: Array.isArray(parsed.items) ? parsed.items : defaults.items,
       categories: Array.isArray(parsed.categories) ? parsed.categories : defaults.categories,
     };
@@ -79,11 +87,29 @@ function saveState() {
 }
 
 function money(value) {
-  return new Intl.NumberFormat(undefined, {
+  const config = CURRENCIES[state.currency] || CURRENCIES.EUR;
+  const amount = Number(value || 0);
+  const digits = currencyDigits(config);
+  const hasFraction = digits > 0 && !Number.isInteger(amount);
+
+  return new Intl.NumberFormat(config.locale, {
     style: "currency",
-    currency: state.currency,
-    maximumFractionDigits: value % 1 === 0 ? 0 : 2,
-  }).format(value || 0);
+    currency: config.code,
+    currencyDisplay: "symbol",
+    minimumFractionDigits: hasFraction ? digits : 0,
+    maximumFractionDigits: digits,
+  }).format(amount);
+}
+
+function normalizeCurrency(currency) {
+  return CURRENCIES[currency] ? currency : "EUR";
+}
+
+function currencyDigits(config) {
+  return new Intl.NumberFormat(config.locale, {
+    style: "currency",
+    currency: config.code,
+  }).resolvedOptions().maximumFractionDigits;
 }
 
 function clamp(value, min, max) {
@@ -545,7 +571,7 @@ attachDropZone(els.unassignedDropZone, null);
 els.addItem.addEventListener("click", () => openEditor("item", "create"));
 els.addCategory.addEventListener("click", () => openEditor("category", "create"));
 els.currency.addEventListener("change", (event) => {
-  state.currency = event.target.value;
+  state.currency = normalizeCurrency(event.target.value);
   render();
 });
 
