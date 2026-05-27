@@ -648,7 +648,8 @@ button:focus-visible {
   padding: 1rem;
 }
 
-.editor {
+.editor,
+.assign-dialog {
   width: min(92vw, 30rem);
   border: 3px solid var(--line);
   border-radius: var(--radius);
@@ -658,11 +659,13 @@ button:focus-visible {
   padding: 0;
 }
 
-.editor::backdrop {
+.editor::backdrop,
+.assign-dialog::backdrop {
   background: rgba(28, 26, 23, 0.42);
 }
 
-.editor form {
+.editor form,
+.assign-dialog form {
   display: grid;
   gap: 1rem;
   padding: 1rem;
@@ -685,6 +688,41 @@ button:focus-visible {
   font-size: 0.8rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.assign-list {
+  display: grid;
+  gap: 0.65rem;
+  max-height: min(58vh, 26rem);
+  overflow: auto;
+}
+
+.assign-option {
+  display: grid;
+  gap: 0.2rem;
+  width: 100%;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: #fffaf0;
+  color: var(--ink);
+  padding: 0.85rem;
+  text-align: left;
+}
+
+.assign-option strong {
+  font-family: "Fraunces", serif;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.assign-option span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.assign-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 @media (max-width: 920px) {
@@ -855,6 +893,8 @@ button:focus-visible {
   }
 
   #unassignedItems .item__actions {
+    display: flex;
+    flex-wrap: wrap;
     top: auto;
     right: auto;
     bottom: 0.6rem;
@@ -864,12 +904,33 @@ button:focus-visible {
     pointer-events: auto;
   }
 
+  .category__body .item-card:not(.is-micro) .item__actions {
+    display: flex;
+    flex-wrap: wrap;
+    top: auto;
+    right: 0.45rem;
+    bottom: 0.45rem;
+    max-width: calc(100% - 0.9rem);
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .category__body .treemap-tile.is-tight:not(.tile-popover) .item__actions,
+  .category__body .treemap-tile.is-tiny:not(.tile-popover) .item__actions {
+    display: none;
+  }
+
   .item-card {
     width: min(calc(var(--tile-cols) * var(--cell-size)), 88vw);
     height: calc(var(--tile-rows) * var(--cell-size));
   }
 
   .editor {
+    width: min(94vw, 30rem);
+  }
+
+  .assign-dialog {
     width: min(94vw, 30rem);
   }
 }

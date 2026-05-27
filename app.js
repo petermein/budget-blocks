@@ -18,6 +18,7 @@ const defaults = createDefaultState();
 let state = loadState();
 let editorIntent = null;
 let draggedItemId = null;
+let assigningItemId = null;
 let activeTilePopover = null;
 let tilePopoverTimer = null;
 
@@ -41,6 +42,9 @@ const els = {
   categories: document.querySelector("#categories"),
   dialog: document.querySelector("#editorDialog"),
   form: document.querySelector("#editorForm"),
+  assignDialog: document.querySelector("#assignDialog"),
+  assignTitle: document.querySelector("#assignTitle"),
+  assignList: document.querySelector("#assignList"),
   editorMode: document.querySelector("#editorMode"),
   editorTitle: document.querySelector("#editorTitle"),
   nameInput: document.querySelector("#nameInput"),
@@ -229,7 +233,7 @@ function renderItems() {
   els.unassignedItems.innerHTML = "";
 
   if (!unassigned.length) {
-    els.unassignedItems.append(emptyState("No loose items. Drag an item here to unassign it."));
+    els.unassignedItems.append(emptyState("No loose items. Move a categorized item here to unassign it."));
     return;
   }
 
@@ -319,6 +323,10 @@ function renderCategoryBody(body, category, previewItem = null) {
 function attachTilePopover(tile, item, body) {
   tile.addEventListener("mouseenter", () => showTilePopover(tile, item, body));
   tile.addEventListener("focusin", () => showTilePopover(tile, item, body));
+  tile.addEventListener("click", (event) => {
+    if (event.target.closest("button")) return;
+    showTilePopover(tile, item, body);
+  });
   tile.addEventListener("mouseleave", scheduleTilePopoverHide);
   tile.addEventListener("focusout", (event) => {
     if (!activeTilePopover?.contains(event.relatedTarget)) scheduleTilePopoverHide();
@@ -339,6 +347,8 @@ function showTilePopover(tile, item, body) {
       <p class="item__amount">${money(Number(item.amount || 0))}</p>
     </div>
     <div class="item__actions">
+      <button class="mini-button" type="button" data-action="assign-item" data-id="${item.id}" aria-label="Move ${escapeHtml(item.name)}">Move</button>
+      <button class="mini-button" type="button" data-action="unassign-item" data-id="${item.id}" aria-label="Remove ${escapeHtml(item.name)} from category">Out</button>
       <button class="mini-button" type="button" data-action="edit-item" data-id="${item.id}" aria-label="Edit ${escapeHtml(item.name)}">Edit</button>
       <button class="mini-button mini-button--danger" type="button" data-action="delete-item" data-id="${item.id}" aria-label="Delete ${escapeHtml(item.name)}">Del</button>
     </div>
@@ -385,6 +395,7 @@ function itemElement(item, options = {}) {
   node.style.setProperty("--tile-rows", shape.rows);
   node.style.setProperty("--tile-cells", shape.cells);
   node.style.setProperty("--item-color", item.color);
+  const moveLabel = item.categoryId ? "Move" : "Place";
   node.innerHTML = `
     <div>
       <p class="item__name">${escapeHtml(item.name)}</p>
@@ -394,6 +405,8 @@ function itemElement(item, options = {}) {
       options.preview
         ? '<p class="preview-label">Drop preview</p>'
         : `<div class="item__actions">
+            <button class="mini-button" type="button" data-action="assign-item" data-id="${item.id}" aria-label="${moveLabel} ${escapeHtml(item.name)}">${moveLabel}</button>
+            ${item.categoryId ? `<button class="mini-button" type="button" data-action="unassign-item" data-id="${item.id}" aria-label="Remove ${escapeHtml(item.name)} from category">Out</button>` : ""}
             <button class="mini-button" type="button" data-action="edit-item" data-id="${item.id}" aria-label="Edit ${escapeHtml(item.name)}">Edit</button>
             <button class="mini-button mini-button--danger" type="button" data-action="delete-item" data-id="${item.id}" aria-label="Delete ${escapeHtml(item.name)}">Del</button>
           </div>`
@@ -507,6 +520,59 @@ function moveItem(itemId, categoryId) {
   if (!item) return;
   item.categoryId = categoryId;
   render();
+}
+
+function openAssignDialog(itemId) {
+  const item = state.items.find((entry) => entry.id === itemId);
+  if (!item) return;
+
+  assigningItemId = itemId;
+  els.assignTitle.textContent = item.categoryId ? `Move ${item.name}` : `Place ${item.name}`;
+  renderAssignList(item);
+  setItemsDrawer(false);
+  els.assignDialog.showModal();
+}
+
+function renderAssignList(item) {
+  els.assignList.innerHTML = "";
+
+  const unassignedButton = document.createElement("button");
+  unassignedButton.className = "assign-option";
+  unassignedButton.type = "button";
+  unassignedButton.disabled = !item.categoryId;
+  unassignedButton.dataset.action = "assign-choice";
+  unassignedButton.dataset.categoryId = "";
+  unassignedButton.innerHTML = `
+    <strong>Loose items</strong>
+    <span>${item.categoryId ? "Remove from category" : "Already loose"}</span>
+  `;
+  els.assignList.append(unassignedButton);
+
+  state.categories.forEach((category) => {
+    const spent = categorySpent(category.id);
+    const remaining = Number(category.amount || 0) - spent;
+    const fits = canMoveItem(item.id, category.id);
+    const isCurrent = item.categoryId === category.id;
+    const button = document.createElement("button");
+    button.className = "assign-option";
+    button.type = "button";
+    button.disabled = isCurrent || !fits;
+    button.dataset.action = "assign-choice";
+    button.dataset.categoryId = category.id;
+    button.innerHTML = `
+      <strong>${escapeHtml(category.name)}</strong>
+      <span>${isCurrent ? "Current category" : `${money(Math.max(0, remaining))} available${fits ? "" : " - no room"}`}</span>
+    `;
+    els.assignList.append(button);
+  });
+}
+
+function chooseAssignment(categoryId) {
+  if (!assigningItemId) return;
+  moveItem(assigningItemId, categoryId || null);
+  assigningItemId = null;
+  els.assignDialog.close();
+  setItemsDrawer(false);
 }
 
 function openEditor(type, mode, id = null) {
@@ -625,6 +691,9 @@ document.addEventListener("click", (event) => {
   const { action, id } = button.dataset;
   if (action === "edit-item") openEditor("item", "edit", id);
   if (action === "delete-item") deleteItem(id);
+  if (action === "assign-item") openAssignDialog(id);
+  if (action === "unassign-item") moveItem(id, null);
+  if (action === "assign-choice") chooseAssignment(button.dataset.categoryId);
   if (action === "edit-category") openEditor("category", "edit", id);
   if (action === "delete-category") deleteCategory(id);
 });
