@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Budget Blocks</title>
+    <meta
+      name="description"
+      content="Visual budget planner with draggable money blocks, proportional categories, fit-based budget limits, local saving, and configurable currency."
+    />
+    <meta property="og:title" content="Budget Blocks" />
+    <meta
+      property="og:description"
+      content="Visual budget planner with draggable money blocks, proportional categories, fit-based budget limits, local saving, and configurable currency."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Public+Sans:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Visual budget divider</p>
+        <h1>Budget Blocks</h1>
+      </div>
+
+      <div class="topbar__actions">
+        <label class="currency-control">
+          <span>Currency</span>
+          <select id="currencySelect" aria-label="Currency">
+            <option value="EUR">EUR - Euro</option>
+            <option value="USD">USD - Dollar</option>
+            <option value="GBP">GBP - Pound</option>
+            <option value="CHF">CHF - Franc</option>
+            <option value="JPY">JPY - Yen</option>
+          </select>
+        </label>
+        <button class="button button--ghost" id="resetBoard" type="button">Start over</button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="item-dock" aria-label="Unassigned items">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Loose items</p>
+            <h2>Drag these into a category</h2>
+          </div>
+          <button class="button button--ink" id="addItem" type="button">Add item</button>
+        </div>
+        <div class="drop-shelf" id="unassignedDropZone">
+          <div class="items-grid" id="unassignedItems"></div>
+        </div>
+      </aside>
+
+      <section class="budget-stage" aria-label="Budget categories">
+        <div class="budget-summary">
+          <div>
+            <p class="eyebrow">Total budget</p>
+            <strong id="totalBudget">€0</strong>
+          </div>
+          <div>
+            <p class="eyebrow">Budget spent</p>
+            <strong id="budgetSpent">€0</strong>
+          </div>
+          <div>
+            <p class="eyebrow">Remaining</p>
+            <strong id="budgetRemaining">€0</strong>
+          </div>
+          <button class="button button--ink" id="addCategory" type="button">Add category</button>
+        </div>
+
+        <div class="category-stack" id="categories"></div>
+      </section>
+    </main>
+
+    <dialog class="editor" id="editorDialog">
+      <form method="dialog" id="editorForm">
+        <div class="editor__head">
+          <div>
+            <p class="eyebrow" id="editorMode">Create</p>
+            <h2 id="editorTitle">Item</h2>
+          </div>
+          <button class="icon-button" value="cancel" aria-label="Close" type="submit">x</button>
+        </div>
+
+        <label>
+          <span>Name</span>
+          <input id="nameInput" name="name" autocomplete="off" required />
+        </label>
+
+        <label>
+          <span>Amount</span>
+          <input id="amountInput" name="amount" inputmode="decimal" min="0" step="0.01" type="number" required />
+        </label>
+
+        <menu class="editor__actions">
+          <button class="button button--ghost" value="cancel" type="submit">Cancel</button>
+          <button class="button button--ink" id="saveEditor" value="default" type="submit">Save</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
