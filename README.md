@@ -1,6 +1,6 @@
 # Budget Blocks
 
-Visual budget planner with draggable money blocks, proportional categories, fit-based budget limits, local saving, and configurable currency.
+Visual budget planner with draggable money blocks, proportional categories, fit-based budget limits, local saving, share links, and configurable currency.
 
 **Demo:** https://petermein.github.io/budget-blocks/
 
@@ -17,7 +17,7 @@ Budget Blocks turns a budget into a spatial board. Add items with amounts, creat
 - Drop preview that shows how a category will reshape before placement
 - Fit-based restriction that blocks overspending a category
 - Currency selector with EUR as the default
-- Local browser persistence with localStorage
+- Local browser persistence with localStorage and URL share links
 - Start-over reset
 - No build step or backend
 

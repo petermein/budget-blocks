@@ -45,7 +45,9 @@
             <option value="JPY">JPY - Japanese Yen</option>
           </select>
         </label>
+        <button class="button button--ink" id="shareBoard" type="button">Share</button>
         <button class="button button--ghost" id="resetBoard" type="button">Start over</button>
+        <p class="share-status" id="shareStatus" aria-live="polite"></p>
       </div>
     </header>
 
@@ -125,6 +127,26 @@
         </div>
 
         <div class="assign-list" id="assignList"></div>
+      </form>
+    </dialog>
+
+    <dialog class="import-dialog" id="importDialog">
+      <form method="dialog">
+        <div class="editor__head">
+          <div>
+            <p class="eyebrow">Shared board</p>
+            <h2>Open this budget?</h2>
+          </div>
+        </div>
+
+        <p class="dialog-copy">
+          This link contains a different Budget Blocks board. Import it to replace the board saved in this browser, or keep your current board.
+        </p>
+
+        <menu class="editor__actions">
+          <button class="button button--ghost" value="keep" type="submit">Keep my board</button>
+          <button class="button button--ink" id="importSharedBoard" value="import" type="submit">Import shared board</button>
+        </menu>
       </form>
     </dialog>
 

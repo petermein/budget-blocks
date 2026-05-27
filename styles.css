@@ -108,6 +108,20 @@ h2 {
   text-transform: uppercase;
 }
 
+.share-status {
+  min-width: 6.5rem;
+  margin: 0;
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.share-status:empty {
+  display: none;
+}
+
 select,
 input {
   width: 100%;
@@ -649,7 +663,8 @@ button:focus-visible {
 }
 
 .editor,
-.assign-dialog {
+.assign-dialog,
+.import-dialog {
   width: min(92vw, 30rem);
   border: 3px solid var(--line);
   border-radius: var(--radius);
@@ -660,12 +675,14 @@ button:focus-visible {
 }
 
 .editor::backdrop,
-.assign-dialog::backdrop {
+.assign-dialog::backdrop,
+.import-dialog::backdrop {
   background: rgba(28, 26, 23, 0.42);
 }
 
 .editor form,
-.assign-dialog form {
+.assign-dialog form,
+.import-dialog form {
   display: grid;
   gap: 1rem;
   padding: 1rem;
@@ -688,6 +705,13 @@ button:focus-visible {
   font-size: 0.8rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.dialog-copy {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .assign-list {
@@ -771,7 +795,7 @@ button:focus-visible {
   .topbar__actions {
     position: static;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 1fr;
     align-items: end;
     gap: 0.75rem;
     margin: 0 0.85rem 0.85rem;
@@ -786,6 +810,16 @@ button:focus-visible {
   .topbar__actions .button {
     min-height: 2.65rem;
     white-space: nowrap;
+  }
+
+  .currency-control,
+  .share-status {
+    grid-column: 1 / -1;
+  }
+
+  .share-status {
+    min-height: 1rem;
+    text-align: left;
   }
 
   .app-shell {
@@ -919,7 +953,8 @@ button:focus-visible {
     width: min(94vw, 30rem);
   }
 
-  .assign-dialog {
+  .assign-dialog,
+  .import-dialog {
     width: min(94vw, 30rem);
   }
 }

@@ -1,5 +1,7 @@
 const STORAGE_KEY = "budget-blocks-board-v1";
 const LEGACY_STORAGE_KEY = "budget-atlas-board-v1";
+const SHARE_HASH_KEY = "board";
+const SHARE_VERSION = 1;
 const TARGET_BOARD_CELLS = 80;
 const CATEGORY_COLUMNS = 10;
 
@@ -14,13 +16,17 @@ const CURRENCIES = {
 const palette = ["#f0c85a", "#8fb6a3", "#e58a64", "#91a8d1", "#c7a6d8", "#d8b06a"];
 
 const defaults = createDefaultState();
+const startup = resolveStartupState();
 
-let state = loadState();
+let state = startup.state;
+let pendingSharedState = startup.pendingSharedState;
+let urlSyncPaused = Boolean(pendingSharedState);
 let editorIntent = null;
 let draggedItemId = null;
 let assigningItemId = null;
 let activeTilePopover = null;
 let tilePopoverTimer = null;
+let shareStatusTimer = null;
 
 const els = {
   topbar: document.querySelector(".topbar"),
@@ -32,6 +38,8 @@ const els = {
   budgetRemaining: document.querySelector("#budgetRemaining"),
   addItem: document.querySelector("#addItem"),
   addCategory: document.querySelector("#addCategory"),
+  shareBoard: document.querySelector("#shareBoard"),
+  shareStatus: document.querySelector("#shareStatus"),
   resetBoard: document.querySelector("#resetBoard"),
   openItems: document.querySelector("#openItems"),
   closeItems: document.querySelector("#closeItems"),
@@ -45,6 +53,8 @@ const els = {
   assignDialog: document.querySelector("#assignDialog"),
   assignTitle: document.querySelector("#assignTitle"),
   assignList: document.querySelector("#assignList"),
+  importDialog: document.querySelector("#importDialog"),
+  importSharedBoard: document.querySelector("#importSharedBoard"),
   editorMode: document.querySelector("#editorMode"),
   editorTitle: document.querySelector("#editorTitle"),
   nameInput: document.querySelector("#nameInput"),
@@ -53,21 +63,31 @@ const els = {
 
 const mobileLayout = window.matchMedia("(max-width: 560px)");
 
-function loadState() {
+function resolveStartupState() {
+  const localState = loadStoredState();
+  const sharedState = loadSharedState();
+
+  if (!sharedState) {
+    return { state: localState || clone(defaults), pendingSharedState: null };
+  }
+
+  if (!localState || canonicalState(localState) === canonicalState(sharedState)) {
+    return { state: sharedState, pendingSharedState: null };
+  }
+
+  return { state: localState, pendingSharedState: sharedState };
+}
+
+function loadStoredState() {
   const stored = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
-  if (!stored) return clone(defaults);
+  if (!stored) return null;
 
   try {
-    const parsed = JSON.parse(stored);
-    const nextState = {
-      currency: normalizeCurrency(parsed.currency),
-      items: Array.isArray(parsed.items) ? parsed.items : defaults.items,
-      categories: Array.isArray(parsed.categories) ? parsed.categories : defaults.categories,
-    };
+    const nextState = normalizeState(JSON.parse(stored));
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
     return nextState;
   } catch {
-    return clone(defaults);
+    return null;
   }
 }
 
@@ -97,6 +117,165 @@ function makeId() {
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  syncUrl();
+}
+
+function loadSharedState() {
+  const params = new URLSearchParams(window.location.hash.slice(1));
+  const payload = params.get(SHARE_HASH_KEY);
+  if (!payload) return null;
+
+  try {
+    return normalizeState(JSON.parse(decodeSharePayload(payload)));
+  } catch {
+    return null;
+  }
+}
+
+function normalizeState(value) {
+  const categories = Array.isArray(value?.categories)
+    ? value.categories.map(normalizeCategory).filter(Boolean)
+    : clone(defaults.categories);
+  const categoryIds = new Set(categories.map((category) => category.id));
+  const items = Array.isArray(value?.items)
+    ? value.items.map((item, index) => normalizeItem(item, index, categoryIds)).filter(Boolean)
+    : clone(defaults.items);
+
+  return {
+    currency: normalizeCurrency(value?.currency),
+    items,
+    categories,
+  };
+}
+
+function normalizeCategory(category, index) {
+  if (!category || typeof category !== "object") return null;
+  const name = cleanName(category.name, `Category ${index + 1}`);
+  return {
+    id: cleanId(category.id),
+    name,
+    amount: cleanAmount(category.amount),
+    color: cleanColor(category.color, palette[index % palette.length]),
+  };
+}
+
+function normalizeItem(item, index, categoryIds) {
+  if (!item || typeof item !== "object") return null;
+  const categoryId = cleanId(item.categoryId);
+  return {
+    id: cleanId(item.id),
+    name: cleanName(item.name, `Item ${index + 1}`),
+    amount: cleanAmount(item.amount),
+    categoryId: categoryIds.has(categoryId) ? categoryId : null,
+    color: cleanColor(item.color, palette[index % palette.length]),
+  };
+}
+
+function cleanName(value, fallback) {
+  const name = String(value || "").trim();
+  return name ? name.slice(0, 80) : fallback;
+}
+
+function cleanId(value) {
+  const id = String(value || "").trim();
+  return id ? id.slice(0, 120) : makeId();
+}
+
+function cleanAmount(value) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount) || amount < 0) return 0;
+  return amount;
+}
+
+function cleanColor(value, fallback) {
+  const color = String(value || "").trim();
+  return /^#[0-9a-f]{6}$/i.test(color) ? color : fallback;
+}
+
+function canonicalState(value) {
+  return JSON.stringify(normalizeState(value));
+}
+
+function shareUrl() {
+  const url = new URL(window.location.href);
+  url.hash = `${SHARE_HASH_KEY}=${encodeSharePayload(JSON.stringify(state))}`;
+  return url.toString();
+}
+
+function syncUrl() {
+  if (urlSyncPaused) return;
+  window.history.replaceState(null, "", shareUrl());
+}
+
+function encodeSharePayload(value) {
+  const bytes = new TextEncoder().encode(JSON.stringify({ v: SHARE_VERSION, state: JSON.parse(value) }));
+  let binary = "";
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "");
+}
+
+function decodeSharePayload(value) {
+  const padded = value.replaceAll("-", "+").replaceAll("_", "/").padEnd(Math.ceil(value.length / 4) * 4, "=");
+  const binary = atob(padded);
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  const parsed = JSON.parse(new TextDecoder().decode(bytes));
+  if (parsed?.v !== SHARE_VERSION || !parsed.state) throw new Error("Unsupported share payload");
+  return JSON.stringify(parsed.state);
+}
+
+async function copyShareLink() {
+  syncUrl();
+  const url = shareUrl();
+
+  try {
+    if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
+    await navigator.clipboard.writeText(url);
+  } catch {
+    copyTextFallback(url);
+  }
+
+  showShareStatus("Link copied");
+}
+
+function copyTextFallback(value) {
+  const field = document.createElement("textarea");
+  field.value = value;
+  field.setAttribute("readonly", "");
+  field.style.position = "fixed";
+  field.style.top = "-100vh";
+  document.body.append(field);
+  field.select();
+  document.execCommand("copy");
+  field.remove();
+}
+
+function showShareStatus(message) {
+  window.clearTimeout(shareStatusTimer);
+  els.shareStatus.textContent = message;
+  shareStatusTimer = window.setTimeout(() => {
+    els.shareStatus.textContent = "";
+  }, 2200);
+}
+
+function showImportPrompt() {
+  if (!pendingSharedState) return;
+  els.importDialog.showModal();
+}
+
+function importSharedBoard() {
+  if (!pendingSharedState) return;
+  state = pendingSharedState;
+  pendingSharedState = null;
+  urlSyncPaused = false;
+  render();
+}
+
+function keepLocalBoard() {
+  pendingSharedState = null;
+  urlSyncPaused = false;
+  render();
 }
 
 function money(value) {
@@ -662,6 +841,7 @@ attachDropZone(els.unassignedDropZone, null);
 
 els.addItem.addEventListener("click", () => openEditor("item", "create"));
 els.addCategory.addEventListener("click", () => openEditor("category", "create"));
+els.shareBoard.addEventListener("click", copyShareLink);
 els.openItems.addEventListener("click", () => setItemsDrawer(true));
 els.closeItems.addEventListener("click", () => setItemsDrawer(false));
 els.drawerBackdrop.addEventListener("click", () => setItemsDrawer(false));
@@ -682,6 +862,18 @@ els.form.addEventListener("submit", (event) => {
   event.preventDefault();
   commitEditor();
   els.dialog.close();
+});
+
+els.importDialog.addEventListener("submit", (event) => {
+  if (event.submitter?.value === "import") {
+    importSharedBoard();
+  } else {
+    keepLocalBoard();
+  }
+});
+
+els.importDialog.addEventListener("close", () => {
+  if (pendingSharedState) keepLocalBoard();
 });
 
 document.addEventListener("click", (event) => {
@@ -705,3 +897,4 @@ document.addEventListener("keydown", (event) => {
 mobileLayout.addEventListener("change", placeSettingsControls);
 placeSettingsControls();
 render();
+showImportPrompt();
