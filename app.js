@@ -10,6 +10,8 @@ const defaults = createDefaultState();
 let state = loadState();
 let editorIntent = null;
 let draggedItemId = null;
+let activeTilePopover = null;
+let tilePopoverTimer = null;
 
 const els = {
   currency: document.querySelector("#currencySelect"),
@@ -243,6 +245,8 @@ function renderCategories() {
 }
 
 function renderCategoryBody(body, category, previewItem = null) {
+  hideTilePopover();
+
   const categoryItems = state.items
     .filter((item) => item.categoryId === category.id)
     .map((item) => ({ ...item, kind: "item" }));
@@ -266,9 +270,71 @@ function renderCategoryBody(body, category, previewItem = null) {
     rect.style.top = `${entry.y}%`;
     rect.style.width = `${entry.width}%`;
     rect.style.height = `${entry.height}%`;
-    rect.classList.toggle("is-tight", entry.width < 14 || entry.height < 16);
+    const isTight = entry.width < 24 || entry.height < 26;
+    rect.classList.toggle("is-tight", isTight);
+    rect.classList.toggle("is-right-edge", entry.x + entry.width > 72);
+    rect.classList.toggle("is-bottom-edge", entry.y + entry.height > 76);
     body.append(rect);
+    if (isTight && entry.kind === "item") attachTilePopover(rect, entry, body);
   });
+}
+
+function attachTilePopover(tile, item, body) {
+  tile.addEventListener("mouseenter", () => showTilePopover(tile, item, body));
+  tile.addEventListener("focusin", () => showTilePopover(tile, item, body));
+  tile.addEventListener("mouseleave", scheduleTilePopoverHide);
+  tile.addEventListener("focusout", (event) => {
+    if (!activeTilePopover?.contains(event.relatedTarget)) scheduleTilePopoverHide();
+  });
+}
+
+function showTilePopover(tile, item, body) {
+  window.clearTimeout(tilePopoverTimer);
+  hideTilePopover();
+
+  const popover = document.createElement("article");
+  popover.className = "item-card tile-popover";
+  popover.dataset.itemId = item.id;
+  popover.style.setProperty("--item-color", item.color);
+  popover.innerHTML = `
+    <div>
+      <p class="item__name">${escapeHtml(item.name)}</p>
+      <p class="item__amount">${money(Number(item.amount || 0))}</p>
+    </div>
+    <div class="item__actions">
+      <button class="mini-button" type="button" data-action="edit-item" data-id="${item.id}" aria-label="Edit ${escapeHtml(item.name)}">Edit</button>
+      <button class="mini-button mini-button--danger" type="button" data-action="delete-item" data-id="${item.id}" aria-label="Delete ${escapeHtml(item.name)}">Del</button>
+    </div>
+  `;
+
+  popover.addEventListener("mouseenter", () => window.clearTimeout(tilePopoverTimer));
+  popover.addEventListener("mouseleave", scheduleTilePopoverHide);
+  popover.addEventListener("focusin", () => window.clearTimeout(tilePopoverTimer));
+  popover.addEventListener("focusout", scheduleTilePopoverHide);
+
+  body.append(popover);
+  activeTilePopover = popover;
+
+  const width = Math.min(256, body.clientWidth - 24);
+  const height = 136;
+  const left = clamp(tile.offsetLeft, 12, Math.max(12, body.clientWidth - width - 12));
+  const top = clamp(tile.offsetTop, 12, Math.max(12, body.clientHeight - height - 12));
+
+  popover.style.width = `${width}px`;
+  popover.style.height = `${height}px`;
+  popover.style.left = `${left}px`;
+  popover.style.top = `${top}px`;
+}
+
+function scheduleTilePopoverHide() {
+  window.clearTimeout(tilePopoverTimer);
+  tilePopoverTimer = window.setTimeout(hideTilePopover, 120);
+}
+
+function hideTilePopover() {
+  window.clearTimeout(tilePopoverTimer);
+  activeTilePopover?.remove();
+  activeTilePopover = null;
 }
 
 function itemElement(item, options = {}) {

@@ -427,6 +427,11 @@ button:focus-visible {
   position: absolute;
   z-index: 2;
   margin: -1px;
+  transition:
+    min-width 160ms ease,
+    min-height 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .category__body .item-card.treemap-tile {
@@ -459,6 +464,49 @@ button:focus-visible {
   margin: 0;
   font-size: 0.9rem;
   line-height: 1;
+}
+
+.category__body .treemap-tile.is-tight:hover,
+.category__body .treemap-tile.is-tight:focus-within {
+  z-index: 4;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 250, 240, 0.55),
+    5px 5px 0 rgba(28, 26, 23, 0.18);
+}
+
+.tile-popover {
+  position: absolute;
+  z-index: 30;
+  display: grid;
+  align-content: space-between;
+  min-width: 0;
+  min-height: 0;
+  max-width: none;
+  max-height: none;
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 3px rgba(255, 250, 240, 0.82),
+    9px 9px 0 rgba(28, 26, 23, 0.22);
+}
+
+.tile-popover .item__name {
+  max-width: 100%;
+  overflow-wrap: normal;
+}
+
+.tile-popover .item__amount {
+  margin: 0.35rem 0 0;
+  font-size: 1rem;
+  line-height: 1.1;
+}
+
+.tile-popover .item__actions {
+  top: auto;
+  right: 0.45rem;
+  bottom: 0.45rem;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
 }
 
 .item-card.is-preview .item__name {
